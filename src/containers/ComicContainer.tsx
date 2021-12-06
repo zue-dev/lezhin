@@ -1,28 +1,42 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ComicComponent } from "../components";
-import { ComicRankApiSuccessResponse, Periods } from "../model";
+import { effComicRankItem } from "../redux/comic.effect";
+import { selComicRankItem } from "../redux/comic.selector";
 
 export const ComicContainer = () => {
-  const [data, setData] = useState<ComicRankApiSuccessResponse | null>(null);
+  const sentinel = useRef(null);
+  const dispatch = useDispatch();
+  const { comics, error, loading } = useSelector(selComicRankItem);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(
-        process.env.REACT_APP_BASE_URL + "/api/comics/romance?page=1"
-      );
+  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
 
-      return result.data;
-    };
-
-    fetchData().then((res) => {
-      setData(res);
-    });
+    if (target.isIntersecting) {
+      setCurrentPage((prev) => prev + 1);
+    }
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 0,
+    });
+
+    if (sentinel.current) {
+      observer.observe(sentinel.current);
+    }
+  }, [handleObserver]);
+
+  useEffect(() => {
+    dispatch(effComicRankItem(currentPage));
+  }, [currentPage, dispatch]);
+
+  console.log(comics);
+
   return (
-    <div>
-      {data?.data.map((comic) => {
+    <>
+      {comics?.map((comic) => {
         return (
           <ComicComponent
             key={comic.id}
@@ -39,6 +53,9 @@ export const ComicContainer = () => {
           />
         );
       })}
-    </div>
+      <div ref={sentinel}></div>
+      {loading && <div>loading...</div>}
+      {error && <div>{error}</div>}
+    </>
   );
 };
