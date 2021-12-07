@@ -54,3 +54,7 @@ export interface ComicRankApiSuccessResponse {
   hasNext: boolean;
   data: ComicEntity[];
 }
+
+export interface ComicRankApiFailResponse {
+  error: string;
+}

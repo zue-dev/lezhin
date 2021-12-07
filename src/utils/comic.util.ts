@@ -1,4 +1,4 @@
-import { Period } from "../model";
+import { ContentState, Period } from "../model";
 
 export const calcRank = (cur: number, prev: number) => {
   const calcNum = prev - cur;
@@ -31,4 +31,19 @@ export const convertToDay = (day: Period) => {
     default:
       return "일";
   }
+};
+
+export const getContentsState = (
+  contentsState: ContentState,
+  periods: Period[]
+) => {
+  if (contentsState === "completed") {
+    return "완결";
+  }
+
+  if (contentsState === "scheduled" && !periods.length) {
+    return "Zzz..";
+  }
+
+  return contentsState;
 };

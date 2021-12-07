@@ -1,5 +1,7 @@
+export type BadgeIds = "scheduled" | "completed" | "freedEpisode";
+
 export interface BadgeDataEntity {
-  id: string;
+  id: BadgeIds;
   label: string;
 }
 

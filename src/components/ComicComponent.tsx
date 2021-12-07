@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styled from "styled-components";
 import { ComicModel } from "../model";
-import { calcRank, convertToDay } from "../utils";
+import { calcRank, convertToDay, getContentsState } from "../utils";
 
 const Wrap = styled.button`
   display: flex;
@@ -79,9 +79,7 @@ export const ComicComponent: FC<ComicModel> = ({
           {freedEpisodeSize > 0 ? (
             <FreedEpisode>{freedEpisodeSize}화 무료</FreedEpisode>
           ) : null}
-          {contentsState === "completed" ? (
-            "완결"
-          ) : (
+          {getContentsState(contentsState, schedule.periods) === "scheduled" ? (
             <Periods>
               매주{" "}
               {schedule.periods.map((period) => (
@@ -89,6 +87,8 @@ export const ComicComponent: FC<ComicModel> = ({
               ))}
               요일 연재
             </Periods>
+          ) : (
+            getContentsState(contentsState, schedule.periods)
           )}
         </RightItem>
       </Item>

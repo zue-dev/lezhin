@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { comicSlice } from "./comic.slice";
+import { romanceSlice } from "./romance.slice";
 
 const store = configureStore({
   reducer: {
-    comic: comicSlice.reducer,
+    romance: romanceSlice.reducer,
   },
 });
 

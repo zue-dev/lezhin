@@ -1,8 +1,8 @@
 import React from "react";
-import { FilterContainer } from "../containers";
+import { RomanceContainer } from "../containers";
 
 const Page = () => {
-  return <FilterContainer />;
+  return <RomanceContainer />;
 };
 
 export default Page;
